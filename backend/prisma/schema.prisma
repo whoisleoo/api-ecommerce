@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  status    Boolean  @default(true)
+
+  carrinho CartItem[]
+  pedidos  Order[]
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  descricao String?
+  preco     Decimal
+  categoria Category
+  estoque   Int      @default(0)
+  imagem    String?
+  peso      Decimal?
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  status    Boolean  @default(true)
+
+  carrinho     CartItem[]
+  pedidosItens OrderItem[]
+}
+
+model CartItem {
+  id        Int  @id @default(autoincrement())
+  usuarioId Int
+  usuario   User @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  produtoId Int
+  produto   Product @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+
+  quantidade Int      @default(1)
+  criado     DateTime @default(now())
+
+  @@unique([usuarioId, produtoId])
+}
+
+model Order {
+  id     Int    @id @default(autoincrement())
+  numero String @unique @default(cuid())
+
+  usuarioId Int
+  usuario   User @relation(fields: [usuarioId], references: [id])
+
+  subtotal        Decimal
+  frete           Decimal     @default(0)
+  desconto        Decimal     @default(0)
+  total           Decimal
+  status          orderStatus @default(PENDENTE)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  enderecoEntrega String
+  cidadeEntrega   String
+  cepEntrega      String // 9 digitos
+  estadoEntrega   String // 2 digitos
+  complemento     String?
+  telefoneEntrega String
+
+  itens OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  pedidoId  Int
+  pedido    Order   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  produtoId Int
+  produto   Product @relation(fields: [produtoId], references: [id])
+
+  nomeProduto  String
+  precoProduto Decimal
+  quantidade   Int
+  subtotal     Decimal
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+enum Category {
+  CAMISAS
+  ACESSORIOS
+  CALCADOS
+  CHAPEUS
+}
+
+enum orderStatus {
+  PENDENTE
+  CONFIRMADO
+  ENVIADO
+  ENTREGUE
+  CANCELADO
+}
