@@ -2,7 +2,10 @@ import { parse } from "dotenv";
 import { decode } from "jsonwebtoken";
 
 export const validarCPF = function (cpf){
-    cpf = cpf.replace(/\D/g, '') // regex do cpf
+    if (!cpf) {
+        return false;
+    }
+    cpf = cpf.toString().replace(/\D/g, '') // regex do cpf
 
     if(cpf.length !== 11){
         return false;
@@ -62,10 +65,10 @@ export const validarRegistro = function (req, res, next){
     if(cpf && !validarCPF(cpf)){
         erros.push("CPF deve ser válido.")
     };
-    if(nome && nome.trim().length < 3){
+    if(nome && typeof nome === 'string' && nome.trim().length < 3){
         erros.push("Nome deve ter pelo menos 3 digitos.")
     };
-    if(sobrenome && sobrenome.trim().length < 2){
+    if(sobrenome && typeof sobrenome === 'string' && sobrenome.trim().length < 2){
         erros.push("Sobrenome deve ter pelo menos 2 digitos.")
     };
 
@@ -132,7 +135,7 @@ export const validarProduto = function (req, res, next){
     if(!estoque) erros.push("Número de estoque é obrigatório.");
 
 
-   if(nome && nome.trim().length < 3){
+   if(nome && typeof nome === 'string' && nome.trim().length < 3){
     erros.push("O nome do produto precisa ter no mínimo 3 caracteres.")
    }
    if(preco && isNaN(preco) || parseFloat(preco) <= 0 ){

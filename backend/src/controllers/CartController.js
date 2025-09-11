@@ -187,7 +187,6 @@ export const updateCarrinho = async function (req, res){
                     produto: {
                         select: {
                             nome: true,
-                            quantidade: true,
                             estoque: true
                         }
                     }
@@ -220,7 +219,6 @@ export const updateCarrinho = async function (req, res){
                 produto: {
                     select: {
                         nome: true,
-                        quantidade: true,
                         estoque: true,
                         imagem: true
                     }

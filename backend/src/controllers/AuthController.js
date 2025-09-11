@@ -16,7 +16,7 @@ export const loginUser = async function (req, res){
           nome: true,
           sobrenome: true,
           role: true,
-          criado: true,
+          createdAt: true,
           status: true
         }
     })
@@ -79,7 +79,7 @@ export const verificarToken = async function (req, res){
                 nome: true,
                 sobrenome: true,
                 role: true,
-                criado: true,
+                createdAt: true,
                 status: true
             }
         });

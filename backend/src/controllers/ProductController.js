@@ -56,7 +56,7 @@ export const listarProdutos = async function (req, res){
             maxPreco,
             page = 1,
             limit = 12,
-            orderBy = 'criado',
+            orderBy = 'createdAt',
             order = 'desc'
         } = req.query;
 
@@ -96,7 +96,7 @@ export const listarProdutos = async function (req, res){
                     categoria: true,
                     estoque: true,
                     imagem: true,
-                    criado: true
+                    createdAt: true
                 },
                 orderBy: { [orderBy]: order },
                 skip,
@@ -104,6 +104,13 @@ export const listarProdutos = async function (req, res){
             }),
             prisma.product.count({ where })
         ])
+
+        if(total <= 0){
+            return res.status(201).json({
+                message: "Nenhum produto encontrado.",
+                pagina: pageNum
+            })
+        }
 
         res.status(200).json({
             produtos,
@@ -140,7 +147,7 @@ export const buscarProduto = async function (req, res){
               estoque: true,
               imagem: true,
               peso: true,
-              criado: true,
+              createdAt: true,
               status: true
 
             }

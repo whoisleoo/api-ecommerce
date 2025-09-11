@@ -16,7 +16,7 @@ import bcrypt from 'bcryptjs'
         senha : senhaHash,
         nome : nome.trim(),
         sobrenome : sobrenome.trim(),
-        cpf: cpf.replace(/\D/g, '')
+        cpf: cpf.toString().replace(/\D/g, '')
       }
     });
 
@@ -48,7 +48,7 @@ export const listarUser = async function (req, res){
           nome: true,
           sobrenome: true,
           role: true,
-          criado: true,
+          createdAt: true,
           status: true
           }
          });
@@ -76,7 +76,7 @@ export const buscarUser = async function (req, res){
               cpf: true,
               endereco: true,
               telefone: true,
-              criado: true,
+              createdAt: true,
               status: true
 
             }
