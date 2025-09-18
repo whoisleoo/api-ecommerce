@@ -1,15 +1,9 @@
 {
   "version": 2,
-  "env": {
-    "DATABASE_URL": "file:./dev.db"
-  },
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["prisma/**"]
-      }
+      "src": "server.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -20,7 +14,7 @@
   ],
   "functions": {
     "server.js": {
-      "includeFiles": ["prisma/**", "src/**"]
+      "includeFiles": "prisma/**"
     }
   }
 }
